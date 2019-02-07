@@ -22,7 +22,18 @@ use Mix.Releases.Config,
 # when building in that environment, this combination of release
 # and environment configuration is called a profile
 
-cookie = String.to_atom(Base.encode16(:crypto.strong_rand_bytes(32)))
+get_secret = fn name ->
+  # Secret generation hack by Nat Tuck for CS4550
+  # This function is dedicated to the public domain.
+  base = Path.expand("~/.config/phx-secrets")
+  File.mkdir_p!(base)
+  path = Path.join(base, name)
+  unless File.exists?(path) do
+    secret = Base.encode16(:crypto.strong_rand_bytes(32))
+    File.write!(path, secret)
+  end
+  String.trim(File.read!(path))
+end
 
 environment :dev do
   # If you are running Phoenix, you should make sure that
@@ -33,13 +44,13 @@ environment :dev do
   # dev mode.
   set dev_mode: true
   set include_erts: false
-  set cookie: cookie
+  set cookie: String.to_atom(get_secret.("cookie"))
 end
 
 environment :prod do
   set include_erts: true
   set include_src: false
-  set cookie: cookie
+  set cookie: String.to_atom(get_secret.("cookie"))
   set vm_args: "rel/vm.args"
 end
 
