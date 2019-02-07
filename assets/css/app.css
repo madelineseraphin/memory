@@ -7,7 +7,7 @@
     text-align: center;
 }
 
-.row .column {
+.tileRow .column {
     background-color: #ddd;
     border: 1px solid black;
     height: 100px;
@@ -15,12 +15,12 @@
     margin-bottom: 5px;
  }
 
-.row .column.matched {
+.tileRow .column.matched {
     border: 1px solid white;
     background-color: white;
 }
 
-.row .column.flipped {
+.tileRow .column.flipped {
     text-align: center;
     background-color: white;
     color: #9b4dca;
